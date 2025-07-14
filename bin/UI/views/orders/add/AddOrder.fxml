@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="UI.controllers.orders.add.AddOrderController"
+    xmlns="http://javafx.com/javafx/8"
+    spacing="20" alignment="CENTER">
+    <VBox alignment="CENTER">
+        <padding>
+            <Insets top="20" bottom="20" left="30" right="30" />
+        </padding>
+
+        <Label text="Add Order" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <GridPane hgap="10" vgap="15">
+            <padding>
+                <Insets top="10" bottom="10" left="0" right="0" />
+            </padding>
+
+            <Label text="Order Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <HBox alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                <TextField fx:id="orderNameField" prefWidth="200" />
+            </HBox>
+
+            <Label text="Type Order:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <HBox alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <ChoiceBox fx:id="priorityChoiceBox" />
+            </HBox>
+
+            <Label text="Orders:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ScrollPane prefHeight="150" prefWidth="300" fitToWidth="true"
+                GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <VBox fx:id="ordersContainer" spacing="10">
+                    <padding>
+                        <Insets top="10" bottom="10" left="10" right="10" />
+                    </padding>
+                </VBox>
+            </ScrollPane>
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Save" onAction="#handleSave" prefWidth="100" />
+            <Button text="Cancel" onAction="#handleCancel" prefWidth="100" />
+        </HBox>
+    </VBox>
+</HBox>

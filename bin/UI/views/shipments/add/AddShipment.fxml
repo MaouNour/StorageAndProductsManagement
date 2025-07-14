@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="UI.controllers.shipments.add.AddShipmentController"
+    xmlns="http://javafx.com/javafx/8"
+    spacing="20" alignment="CENTER">
+    <VBox alignment="CENTER">
+
+
+        <padding>
+            <Insets top="20" bottom="20" left="30" right="30" />
+        </padding>
+
+        <Label text="Add Shipment" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <GridPane hgap="10" vgap="15">
+            <padding>
+                <Insets top="10" bottom="10" left="0" right="0" />
+            </padding>
+            <Label text="ID :" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="idField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+            <Label text="Destination :" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="destinationField" GridPane.rowIndex="1"
+                GridPane.columnIndex="1" />
+
+            <Label text="Orders:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ScrollPane prefHeight="150" prefWidth="300" fitToWidth="true"
+                GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <VBox fx:id="ordersContainer" spacing="10">
+                    <padding>
+                        <Insets top="10" bottom="10" left="10" right="10" />
+                    </padding>
+                </VBox>
+            </ScrollPane>
+
+            <Label text="Date of Receipt : " GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <DatePicker fx:id="receiptDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+        </GridPane>
+
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Save" onAction="#handleSave" prefWidth="100" />
+            <Button text="Cancel" onAction="#handleCancel" prefWidth="100" />
+        </HBox>
+    </VBox>
+</HBox>

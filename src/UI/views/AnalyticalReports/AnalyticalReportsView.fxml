@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="UI.controllers.AnalyticalReports.AnalyticalReportsController"
+    spacing="15"
+    alignment="CENTER"
+    prefWidth="400"
+    prefHeight="300"
+    style="-fx-background-color: #f9f9f9;">
+
+
+    <padding>
+        <Insets top="40" bottom="40" left="40" right="40" />
+    </padding>
+
+    <Button text="Inventory Value" prefWidth="200" onAction="#inventoryValue" />
+    <Button text="High Cost Shipments" prefWidth="200" onAction="#HighCostShipments" />
+    <Button text="Total Order Cost" prefWidth="200" onAction="#TotalOrderCost" />
+
+</VBox>

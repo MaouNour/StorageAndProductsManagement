@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="UI.controllers.MainUIController">
+
+    <top >
+        <TabPane fx:id="mainTabPane">
+            <Tab text="Products" closable="false">
+                <AnchorPane fx:id="productsTab" />
+            </Tab>
+            <Tab text="Orders" closable="false">
+                <AnchorPane fx:id="ordersTab" />
+            </Tab>
+            <Tab text="Shipments" closable="false">
+                <AnchorPane fx:id="shipmentsTab" />
+            </Tab>
+            <Tab text="Analytical Reports" closable="false">
+                <AnchorPane fx:id="AnalyticalReports" />
+            </Tab>
+        </TabPane>
+    </top>
+</BorderPane>

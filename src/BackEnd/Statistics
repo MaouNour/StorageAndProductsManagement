@@ -1,0 +1,28 @@
+
+product id : 2
+Name : ProductB
+Price:20.0
+
+product id : 1
+Name : ProductA
+Price:100.0
+
+product id : 0
+Name : ProductB
+Price:20.0
+
+product id : 4
+Name : ProductD
+Price:40.0
+
+product id : 3
+Name : ProductC
+Price:30.0
+
+product id : 5
+Name : ProductE
+Price:50.0
+
+products total kinds: 6
+products total number : 1485
+products total row cost : 386100.0

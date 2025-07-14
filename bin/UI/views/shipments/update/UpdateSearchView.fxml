@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/8" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="UI.controllers.shipments.update.UpdateSearchController"
+      spacing="15" alignment="CENTER" >
+       <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="The shipment to be updated" style="-fx-font-size: 16px;" />
+
+    <ListView fx:id="similarProductsList" prefHeight="100" prefWidth="250"/>
+
+    <TextField fx:id="searchIdField" promptText="Enter Shipment ID : " />
+
+    <HBox spacing="10">
+        <Button text="Search" onAction="#handleSearch"/>
+        <Button text="Cancel" onAction="#handleCancel"/>
+    </HBox>
+
+    <Label fx:id="errorLabel" textFill="red" visible="false"/>
+    <Button fx:id="okButton" text="OK" visible="false" onAction="#hideError"/>
+</VBox>

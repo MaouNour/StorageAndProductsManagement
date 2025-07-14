@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx/8"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="UI.controllers.products.update.UpdateSearchController"
+    spacing="15" alignment="CENTER">
+    <VBox alignment="CENTER">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20" />
+        </padding>
+
+        <Label text="The product to be updated" style="-fx-font-size: 16px;" />
+
+        <ListView fx:id="similarProductsList" prefHeight="100" prefWidth="250" />
+        <HBox>
+            <padding>
+                <Insets top="10" bottom="10" left="0" right="0" />
+            </padding>
+            <TextField fx:id="searchIdField" promptText="Enter Product ID" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Button text="Search" onAction="#handleSearch" />
+            <Button text="Cancel" onAction="#handleCancel" />
+        </HBox>
+
+        <Label fx:id="errorLabel" textFill="red" visible="false" />
+        <Button fx:id="okButton" text="OK" visible="false" onAction="#hideError" />
+    </VBox>
+</HBox>
+        
