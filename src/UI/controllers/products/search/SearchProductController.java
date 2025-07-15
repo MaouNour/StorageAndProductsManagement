@@ -108,7 +108,7 @@ public class SearchProductController {
         if (foundProduct != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Product Add");
-            alert.setContentText(product.toString());
+            alert.setContentText("\nID : " + product.getID() + "\n name:"  + product.getName()+ "\navailable amount : " + product.getAvailableAmount() + "\nprice : " + product.getPrice() + "\nbuy from Product : " + product.getAmountFromProduct());
             alert.showAndWait();
         }
     }

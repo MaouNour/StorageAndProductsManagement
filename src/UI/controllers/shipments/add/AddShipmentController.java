@@ -128,8 +128,7 @@ public class AddShipmentController {
             if (node instanceof HBox hbox) {
                 for (Node child : hbox.getChildren()) {
                     if (child instanceof CheckBox checkBox && checkBox.isSelected()) {
-                        Orders o = Data.orders.getHeap().get(i); 
-                        selectedOrders.add(o);
+                        selectedOrders.add(Data.orders.getHeap().get(i));
                     }
                 }
                 i++;
@@ -164,6 +163,19 @@ public class AddShipmentController {
             }
 
         }, AlertType.CONFIRMATION);
+
+        ordersContainer.getChildren().clear();
+        for (Orders order : Data.orders.getHeap()) {
+            HBox orderRow = new HBox(10);
+
+            CheckBox orderCheckBox = new CheckBox(order.getName());
+            Button detailButton = new Button("DETAIL :");
+
+            detailButton.setOnAction(e -> showOrderDetails(order));
+
+            orderRow.getChildren().addAll(orderCheckBox, detailButton);
+            ordersContainer.getChildren().add(orderRow);
+        }
 
     }
 

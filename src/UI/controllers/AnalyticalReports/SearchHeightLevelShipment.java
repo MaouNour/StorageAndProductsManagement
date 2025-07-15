@@ -86,7 +86,7 @@ public class SearchHeightLevelShipment {
             Parent root = loader.load();
 
             MainUIController controller = loader.getController();
-            controller.selectShipmentsTab();
+            controller.selectAnalyticalReports();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

@@ -78,6 +78,12 @@ public class UpdateProductController {
 
         }
 
+        if (selectedProduct.getAvailableAmount() <= selectedProduct.getAmountFromProduct()) {
+            showConfirmation("Error", "Can't keep change because this product exist in orders", onProductUpdated,
+                    AlertType.ERROR);
+            return;
+        }
+
         try {
             Service.updateProduct(
                     new Product(selectedProduct.getID(), nameField.getText().trim(), price, availableAmount),

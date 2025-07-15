@@ -25,6 +25,12 @@ public class MainUIController {
         }
     }
 
+    public void selectAnalyticalReports() {
+        if (mainTabPane != null && shipmentsTab != null) {
+            mainTabPane.getSelectionModel().select(2);
+        }
+    }
+
     @FXML
     public void initialize() {
         try {
