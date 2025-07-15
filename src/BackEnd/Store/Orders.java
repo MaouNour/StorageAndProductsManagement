@@ -15,7 +15,7 @@ public class Orders {
         this.priority = priority;
         this.contentOrder = contentOrder;
         for (Product product : contentOrder) {
-            costTotal += product.getPrice();
+            costTotal += product.getPrice() * product.getAmountFromProduct();
         }
     }
 
@@ -52,6 +52,9 @@ public class Orders {
 
     public void setContentOrder(ArrayList<Product> contentOrder) {
         this.contentOrder = contentOrder;
+        costTotal = 0;
+        for (Product product : this.contentOrder)
+            costTotal += product.getPrice() * product.getAmountFromProduct();
     }
 
     public void setPriority(Priority priority) {

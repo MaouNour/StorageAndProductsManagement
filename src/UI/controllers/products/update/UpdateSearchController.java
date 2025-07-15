@@ -72,8 +72,8 @@ public class UpdateSearchController {
     private void showAllSimilarList(NodeAVL<Product> node, ObservableList<String> nearby) {
         if (node == null)
             return;
-        showAllSimilarList(node.getLeft(), nearby);
-        nearby.add("ID: " + (node.getItem().getID()) + " - " + node.getItem().getName());
+            showAllSimilarList(node.getLeft(), nearby);
+            nearby.add("ID: " + (node.getItem().getID()) + " - " + node.getItem().getName());
         showAllSimilarList(node.getRight(), nearby);
     }
 
@@ -117,7 +117,7 @@ public class UpdateSearchController {
                 controller.initializeWithProduct(product);
 
                 controller.setOnProductUpdated(() -> {
-                    showAllSimilarList(); 
+                    showAllSimilarList();
                 });
 
                 Stage stage = new Stage();

@@ -11,13 +11,8 @@ import BackEnd.Store.Orders;
 import BackEnd.Store.Product;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class UpdateOrderController {
@@ -27,8 +22,7 @@ public class UpdateOrderController {
     @FXML
     private ChoiceBox<String> priorityChoiceBox;
     @FXML
-    private ListView<CheckBox> similarProductsList;
-
+    private ListView<HBox> similarProductsList;
     @FXML
     private TextField nameField;
 
@@ -41,9 +35,40 @@ public class UpdateOrderController {
         priorityChoiceBox.setValue(Priority.getArrStringValues()[0]);
 
         for (Product product : getAllProducts()) {
+            HBox row = new HBox(10);
+            row.setStyle("-fx-alignment: CENTER_LEFT;");
+
             CheckBox checkBox = new CheckBox("ID : " + product.getID() + " - " + product.getName());
-            checkBox.setUserData(product);
-            similarProductsList.getItems().add(checkBox);
+
+            Button minusButton = new Button("-");
+            Label quantityLabel = new Label(String.valueOf(product.getAmountFromProduct()));
+            Button plusButton = new Button("+");
+            HBox counterBox = new HBox(5, minusButton, quantityLabel, plusButton);
+            counterBox.setVisible(false);
+            counterBox.setManaged(false);
+
+            checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                counterBox.setVisible(newVal);
+                counterBox.setManaged(newVal);
+            });
+
+            final int[] quantity = { Integer.parseInt(quantityLabel.getText()) };
+            plusButton.setOnAction(e -> {
+                quantity[0]++;
+                quantityLabel.setText(String.valueOf(quantity[0]));
+            });
+
+            minusButton.setOnAction(e -> {
+                if (quantity[0] > 1) {
+                    quantity[0]--;
+                    quantityLabel.setText(String.valueOf(quantity[0]));
+                }
+            });
+
+            checkBox.setUserData(new Object[] { product, quantity });
+
+            row.getChildren().addAll(checkBox, counterBox);
+            similarProductsList.getItems().add(row);
         }
     }
 
@@ -70,12 +95,17 @@ public class UpdateOrderController {
         priorityChoiceBox.setValue(order.getPriority().name());
         nameField.setText(order.getName());
 
-        for (CheckBox checkBox : similarProductsList.getItems()) {
-            Product p = (Product) checkBox.getUserData();
-            for (Product selected : order.getContentOrder()) {
-                if (p.getID() == selected.getID()) {
-                    checkBox.setSelected(true);
-                    break;
+        for (HBox row : similarProductsList.getItems()) {
+            for (javafx.scene.Node node : row.getChildren()) {
+                if (node instanceof CheckBox checkBox) {
+                    Object[] data = (Object[]) checkBox.getUserData();
+                    Product p = (Product) data[0];
+                    for (Product selected : order.getContentOrder()) {
+                        if (p.getID() == selected.getID()) {
+                            checkBox.setSelected(true);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -90,12 +120,18 @@ public class UpdateOrderController {
             showAlert("Error", "Order name cannot be empty.");
             return;
         }
+
         ArrayList<Product> selectedProducts = new ArrayList<>();
 
-        for (CheckBox checkBox : similarProductsList.getItems()) {
-            if (checkBox.isSelected()) {
-                Product p = (Product) checkBox.getUserData();
-                selectedProducts.add(p);
+        for (HBox row : similarProductsList.getItems()) {
+            for (javafx.scene.Node node : row.getChildren()) {
+                if (node instanceof CheckBox checkBox && checkBox.isSelected()) {
+                    Object[] data = (Object[]) checkBox.getUserData();
+                    Product product = (Product) data[0];
+                    int quantity = ((int[]) data[1])[0];
+                    product.updateAmountFromProduct(quantity);
+                    selectedProducts.add(product);
+                }
             }
         }
 
@@ -103,23 +139,25 @@ public class UpdateOrderController {
             showAlert("Error", "Please select at least one product.");
             return;
         }
+        selectedOrder.setContentOrder(selectedProducts);
 
+        if (selectedOrder.getCostTotal() > Data.levelMoneySideOrders) {
+            showAlert("ERROR", "Exceeding the budget limit of " + Data.levelMoneySideOrders + "$.");
+            return;
+        }
         Priority pri = Priority.valueOf(selectedPriority.toUpperCase());
         boolean reAdd = !(selectedOrder.getPriority() == pri);
 
         selectedOrder.setName(newName);
-        selectedOrder.setPriority(Priority.valueOf(selectedPriority.toUpperCase()));
-        selectedOrder.setContentOrder(selectedProducts);
+        selectedOrder.setPriority(pri);
 
         if (reAdd)
             Service.updatePriorityOrder(selectedOrder, Data.orders.getHeap().indexOf(selectedOrder));
 
         showConfirmation("Do you trust to save changes?", () -> {
-
             if (onOrderUpdated != null) {
                 onOrderUpdated.run();
             }
-
             ((Stage) saveButton.getScene().getWindow()).close();
         });
     }
@@ -150,5 +188,4 @@ public class UpdateOrderController {
             onConfirm.run();
         }
     }
-
 }

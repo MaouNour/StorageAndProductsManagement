@@ -74,6 +74,25 @@ public class Heap<T extends Orders> {
         return heap;
     }
 
+    public T remove(int index) {
+        if (index < 0 || index >= heap.size()) {
+            throw new IndexOutOfBoundsException("Invalid index for removal.");
+        }
+
+        heap.get(index).updatePriority(Priority.SPECIAL);
+        heapifyUp(index);
+        return extractHeightPriority();
+    }
+
+    public boolean remove(T target) {
+        int index = heap.indexOf(target);
+        if (index == -1)
+            return false;
+
+        remove(index);
+        return true;
+    }
+
     public void updatePriorityWithDetect(int index, Priority priority) {
         T orderRemove = heap.remove(index);
         orderRemove.updatePriority(priority);
@@ -90,10 +109,10 @@ public class Heap<T extends Orders> {
         return arr;
     }
 
-    public double costOrders(){
-        double costTotal =0;
+    public double costOrders() {
+        double costTotal = 0;
         for (T t : heap) {
-            costTotal +=  t.getCostTotal();
+            costTotal += t.getCostTotal();
         }
         return costTotal;
     }

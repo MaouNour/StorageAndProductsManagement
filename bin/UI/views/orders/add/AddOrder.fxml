@@ -30,7 +30,7 @@
                 <ChoiceBox fx:id="priorityChoiceBox" />
             </HBox>
 
-            <Label text="Orders:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <Label text="Products:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
             <ScrollPane prefHeight="150" prefWidth="300" fitToWidth="true"
                 GridPane.rowIndex="2" GridPane.columnIndex="1">
                 <VBox fx:id="ordersContainer" spacing="10">

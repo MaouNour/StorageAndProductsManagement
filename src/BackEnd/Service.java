@@ -30,6 +30,7 @@ public interface Service {
         Product p4 = new Product(3, "ProductC", 30.0, 300);
         Product p5 = new Product(2, "ProductB", 20.0, 200);
         Product p6 = new Product(0, "ProductB", 20.0, 200);
+        Product p7 = new Product(55, "ggg", 10.0, 10);
 
         Data.goods.add(p1);
         Data.goods.add(p2);
@@ -37,6 +38,7 @@ public interface Service {
         Data.goods.add(p4);
         Data.goods.add(p5);
         Data.goods.add(p6);
+        Data.goods.add(p7);
 
         Orders o1 = new Orders("Order4", Priority.REGULAR, new ArrayList<>(Arrays.asList(
                 p1, p3, p6)));
@@ -50,6 +52,18 @@ public interface Service {
                 p3, p5)));
         Orders o6 = new Orders("Order6", Priority.SPECIAL, new ArrayList<>(Arrays.asList(
                 p1, p6)));
+        Orders o7 = new Orders("Order7", Priority.REGULAR, new ArrayList<>(Arrays.asList(
+                p1, p3, p6)));
+        Orders o8 = new Orders("Order8", Priority.URGENT, new ArrayList<>(Arrays.asList(
+                p4, p5)));
+        Orders o9 = new Orders("Order9", Priority.URGENT, new ArrayList<>(Arrays.asList(
+                p1)));
+        Orders o10 = new Orders("Order10", Priority.SPECIAL, new ArrayList<>(Arrays.asList(
+                p2, p4)));
+        Orders o11 = new Orders("Order11", Priority.REGULAR, new ArrayList<>(Arrays.asList(
+                p3, p5)));
+        Orders o12 = new Orders("Order12", Priority.SPECIAL, new ArrayList<>(Arrays.asList(
+                p1, p6)));
 
         Data.orders.insert(o1);
         Data.orders.insert(o2);
@@ -57,6 +71,12 @@ public interface Service {
         Data.orders.insert(o4);
         Data.orders.insert(o5);
         Data.orders.insert(o6);
+        Data.orders.insert(o7);
+        Data.orders.insert(o8);
+        Data.orders.insert(o9);
+        Data.orders.insert(o10);
+        Data.orders.insert(o11);
+        Data.orders.insert(o12);
 
         int currentYear = LocalDate.now().getYear();
         int currentMonth = LocalDate.now().getMonthValue();
@@ -75,10 +95,9 @@ public interface Service {
         Freight f3 = new Freight(103, "DestinationC", date3,
                 new ArrayList<>(Arrays.asList(Service.sendOrder(3))));
         Freight f4 = new Freight(104, "DestinationD", date4,
-                new ArrayList<>(Arrays.asList(Service.sendOrder(4))));
+                new ArrayList<>(Arrays.asList(Service.sendOrder(5))));
         Freight f5 = new Freight(105, "DestinationE", date5,
-                new ArrayList<>(Arrays.asList(Service.sendOrder(0),
-                        Service.sendOrder(4))));
+                new ArrayList<>(Arrays.asList(Service.sendOrder(4))));
         Data.freight.add(f4);
         Data.freight.add(f3);
         Data.freight.add(f5);
@@ -134,7 +153,18 @@ public interface Service {
     public static Orders sendOrder(int key) throws IllegalAvailableAmountException, IDException {
         Orders wanted = null;
 
-        wanted = Data.orders.getHeap().get(key);
+        wanted = Data.orders.remove(key);
+
+        for (Product product : wanted.getContentOrder()) {
+
+            if (wanted != null)
+                product.updateAvailableAmount(product.getAvailableAmount() - 1);
+
+        }
+        return wanted;
+    }
+
+    public static Orders sendOrder(Orders wanted) throws IllegalAvailableAmountException, IDException {
         for (Product product : wanted.getContentOrder()) {
 
             if (wanted != null)

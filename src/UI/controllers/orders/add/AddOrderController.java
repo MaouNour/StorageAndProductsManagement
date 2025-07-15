@@ -20,8 +20,6 @@ import java.util.Optional;
 import BackEnd.Service;
 import BackEnd.Basic.Priority;
 import BackEnd.DS.NodeAVL;
-import BackEnd.Exceptions.ExceedingBudgetLimitsException;
-import BackEnd.Exceptions.IDException;
 import BackEnd.Exceptions.IllegalAvailableAmountException;
 import BackEnd.Store.Data;
 import BackEnd.Store.Orders;
@@ -39,16 +37,45 @@ public class AddOrderController {
 
     @FXML
     public void initialize() {
-        for (Product product : getAllProducts()) {
+        ArrayList<Product> allProducts = getAllProducts();
+
+        for (Product product : allProducts) {
             HBox row = new HBox(10);
             row.setStyle("-fx-alignment: CENTER_LEFT;");
 
             CheckBox checkBox = new CheckBox(product.getName());
             Button detailButton = new Button("Detail");
 
+            Button minusButton = new Button("-");
+            Label quantityLabel = new Label("1");
+            Button plusButton = new Button("+");
+            HBox counterBox = new HBox(5, minusButton, quantityLabel, plusButton);
+            counterBox.setVisible(false); // يبدأ مخفياً
+            counterBox.setManaged(false); // لا يشغل مساحة
+
             detailButton.setOnAction(e -> showProductDetails(product));
 
-            row.getChildren().addAll(checkBox, detailButton);
+            checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                counterBox.setVisible(newVal);
+                counterBox.setManaged(newVal);
+            });
+
+            final int[] quantity = { 1 };
+            plusButton.setOnAction(e -> {
+                quantity[0]++;
+                quantityLabel.setText(String.valueOf(quantity[0]));
+            });
+
+            minusButton.setOnAction(e -> {
+                if (quantity[0] > 1) {
+                    quantity[0]--;
+                    quantityLabel.setText(String.valueOf(quantity[0]));
+                }
+            });
+
+            checkBox.setUserData(new Object[] { product, quantity });
+
+            row.getChildren().addAll(checkBox, detailButton, counterBox);
             ordersContainer.getChildren().add(row);
         }
 
@@ -87,61 +114,68 @@ public class AddOrderController {
         String orderName = orderNameField.getText();
         ArrayList<Product> selectedProducts = new ArrayList<>();
 
-        int i = 0;
+        if (orderName.equals("")) {
+            showConfirmation("Error", "Pls, Name is Empty", () -> {
+            }, AlertType.ERROR);
+            return;
+        }
+
         for (Node node : ordersContainer.getChildren()) {
             if (node instanceof HBox hbox) {
                 for (Node child : hbox.getChildren()) {
                     if (child instanceof CheckBox checkBox && checkBox.isSelected()) {
-                        Product p = getAllProducts().get(i);
-                        selectedProducts.add(p);
+                        Object[] data = (Object[]) checkBox.getUserData();
+                        Product product = (Product) data[0];
+                        int quantity = ((int[]) data[1])[0];
+                        if (product.getAvailableAmount() <= quantity) {
+                            showConfirmation("ERROR", "Can't add amount from product bigger than available amount",
+                                    () -> {
+                                    }, AlertType.ERROR);
+                            return;
+                        }
+                        try {
+                            product.updateAvailableAmount(product.getAvailableAmount() - quantity);
+                        } catch (IllegalAvailableAmountException e) {
+                            return;
+                        }
+                        product.updateAmountFromProduct(quantity);
+                        selectedProducts.add(product);
                     }
                 }
-                i++;
             }
         }
 
-        if (orderName.equals("")) {
-            showConfirmation("Error", "Pls,Name is Empty", () -> {
-            }, AlertType.ERROR);
-            return;
-        }
         if (selectedProducts.isEmpty()) {
             showConfirmation("Error", "Pls, select products for order", () -> {
             }, AlertType.ERROR);
             return;
         }
+
         try {
             Service.addNewOrderWithPriority(
-                    new Orders(orderName, Priority.valueOf(Priority.getArrStringValues()[priority]),
-                            selectedProducts));
-        } catch (IllegalAvailableAmountException e) {
-            showConfirmation("Error", e.getMessage(), () -> {
-            }, AlertType.ERROR);
-            return;
-        } catch (IDException e) {
-            showConfirmation("Error", e.getMessage(), () -> {
-            }, AlertType.ERROR);
-            return;
-        } catch (ExceedingBudgetLimitsException e) {
+                    new Orders(orderName, Priority.valueOf(Priority.getArrStringValues()[priority]), selectedProducts));
+        } catch (Exception e) {
             showConfirmation("Error", e.getMessage(), () -> {
             }, AlertType.ERROR);
             return;
         }
-        showConfirmation("CONFIRME", "Save Done ✅", () -> {
 
+        showConfirmation("CONFIRMED", "Save Done ✅", () -> {
             priorityChoiceBox.setValue(Priority.getArrStringValues()[0]);
             orderNameField.setText("");
 
             for (Node node : ordersContainer.getChildren()) {
                 if (node instanceof HBox hbox) {
                     for (Node child : hbox.getChildren()) {
-                        if (child instanceof CheckBox checkBox && checkBox.isSelected()) {
+                        if (child instanceof CheckBox checkBox) {
                             checkBox.setSelected(false);
+                            Object[] data = (Object[]) checkBox.getUserData();
+                            int[] quantity = (int[]) data[1];
+                            quantity[0] = 1;
                         }
                     }
                 }
             }
-
         }, AlertType.CONFIRMATION);
     }
 

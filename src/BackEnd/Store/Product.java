@@ -7,12 +7,22 @@ public class Product extends BasicClass {
     private String name;
     private double price;
     private double availableAmount;
+    private int amountFromProduct;
+
+    public Product(int ID, String name, double price, double availableAmount, int amountFromProduct) {
+        super(ID);
+        this.name = name;
+        this.price = price;
+        this.availableAmount = availableAmount;
+        this.amountFromProduct = amountFromProduct;
+    }
 
     public Product(int ID, String name, double price, double availableAmount) {
         super(ID);
         this.name = name;
         this.price = price;
         this.availableAmount = availableAmount;
+        this.amountFromProduct = 1;
     }
 
     public double getPrice() {
@@ -46,6 +56,14 @@ public class Product extends BasicClass {
         return this.availableAmount < 1;
     }
 
+    public int getAmountFromProduct() {
+        return amountFromProduct;
+    }
+
+    public void updateAmountFromProduct(int amountFromProduct) {
+        this.amountFromProduct = amountFromProduct;
+    }
+
     @Override
     public void print() {
         System.out.println();
@@ -64,6 +82,8 @@ public class Product extends BasicClass {
         product += "\nName : " + this.name;
         product += "\nPrice : " + this.price;
         product += "\nAvailable Amount : " + this.availableAmount;
+        product += "\nAmount from quantity : " + this.amountFromProduct;
+
         return product;
     }
 

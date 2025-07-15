@@ -65,7 +65,13 @@ public class AddProductController {
             return;
 
         } else {
-            price = Double.parseDouble(priceField.getText());
+            try {
+                price = Double.parseDouble(priceField.getText());
+            } catch (NumberFormatException e) {
+                showConfirmation("Error", "Price is Illogical", () -> {
+                }, Alert.AlertType.ERROR);
+                return;
+            }
         }
 
         int availableAmount = -1;
@@ -79,7 +85,13 @@ public class AddProductController {
             return;
 
         } else {
-            availableAmount = Integer.parseInt(quantityField.getText());
+            try {
+                availableAmount = Integer.parseInt(quantityField.getText());
+            } catch (NumberFormatException e) {
+                showConfirmation("Error", "Available is Illogical", () -> {
+                }, Alert.AlertType.ERROR);
+                return;
+            }
         }
 
         try {
