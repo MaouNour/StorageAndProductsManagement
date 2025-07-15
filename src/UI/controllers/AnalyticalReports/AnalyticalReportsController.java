@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 
@@ -49,10 +50,14 @@ public class AnalyticalReportsController {
     }
 
     private void showConfirmation(String title, String message, AlertType alertType, Runnable onConfirm) {
+        TextArea textArea = new TextArea(message);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
-        alert.setContentText(message);
-
+        alert.getDialogPane().setContent(textArea);
+        alert.setResizable(true);
+        alert.setHeight(300);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             onConfirm.run();

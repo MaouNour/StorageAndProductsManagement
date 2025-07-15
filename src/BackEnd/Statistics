@@ -23,8 +23,12 @@ product id : 5
 Name : ProductE
 Price:50.0
 
-products total kinds: 6
-products total number : 1485
-products total row cost : 386100.0
+product id : 55
+Name : ggg
+Price:10.0
 
-total order cost:690.0
+products total kinds: 7
+products total number : 1499
+products total row cost : 404730.0
+
+total order cost:580.0
